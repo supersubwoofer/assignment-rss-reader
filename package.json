@@ -1,7 +1,7 @@
 {
-  "name": "es6-browser-project-starter",
+  "name": "assignment-rss-reader",
   "version": "1.0.0",
-  "description": "Basic ES6 Browser project",
+  "description": "Coding Assignment for a RSS reader and Favourite Feeds Management",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
