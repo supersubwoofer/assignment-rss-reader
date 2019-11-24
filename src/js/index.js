@@ -1,6 +1,7 @@
 import * as jQuery from 'jquery';
+import { router, route } from 'jqueryrouter';
 
-(function($) {
+(function($, router, route) {
   
   // Models
   class FeedItem {
@@ -36,6 +37,18 @@ import * as jQuery from 'jquery';
     }
   }
 
+  // Routing
+  route(handler);
+  function handler(e) {
+    switch(e.route) {
+      case '#home': { loadChannelDataToDOM(); }
+      case '#fav': { 
+        var list = $('#main-content').empty();
+        list.append(`<p>fav</p>`);  
+     }
+    }
+  }
+  
   // view modules
   function Feed(data) {
     this.render = function() {
@@ -79,18 +92,17 @@ import * as jQuery from 'jquery';
   }
   
   // entry point - app setup
-  var populateChannel = function(xmlDoc) {
+  var populateChannelDataToDOM = function(xmlDoc) {
 
     var allItems = xmlDocToJSObj(xmlDoc);
     var channel = new Channel(allItems);
 
-    var list = $('#main').empty();
+    var list = $('#main-content').empty();
     list.append(channel.render());  
   };
-  
-  $(document).ready(function() {
+  var loadChannelDataToDOM = function(){
     var success = function(data) {
-      populateChannel(data);
+      populateChannelDataToDOM(data);
     };
 
     var error = function(error) {
@@ -101,7 +113,10 @@ import * as jQuery from 'jquery';
     getAllFeeds()
     .done(success)
     .fail(error);
+  }
 
+  $(document).ready(function() {
+    loadChannelDataToDOM();
   });
 
-})(jQuery)
+})(jQuery, router, route)

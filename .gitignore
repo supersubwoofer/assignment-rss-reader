@@ -1,7 +1,7 @@
 node_modules
 .tmp
-.cache/
-.ionide/
-dist/
-build/
-public/
+.cache/*
+.ionide/*
+dist/*
+build/*
+public/*
