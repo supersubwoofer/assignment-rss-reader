@@ -116,7 +116,21 @@ import { equal } from 'assert';
       var isHashChange = (e.type === 'hashchange' || e.eventName === 'hashchange');
 
       if((isPageReload && !hasHash) || isHashChange){
-        switch(e.route) {
+        var route = e.route;
+
+        
+        /* -----------------------
+        *** Important !!!
+        *** Hacked for not accessing the index.html from web server - 
+        *** The url path will be a local machine file system path
+        *** ONLY for the requirement of the assignment
+        */
+        if(route.search("index.html") > -1){
+          route = "/index.html"; 
+        }
+        // ------------------------
+
+        switch(route) {
           case '/':
           case '/index.html':
           case '#/home': { 
