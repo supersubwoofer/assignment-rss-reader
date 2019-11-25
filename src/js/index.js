@@ -1,5 +1,6 @@
 import * as jQuery from 'jquery';
-import { router, route } from 'jqueryrouter';
+import { router, route, unroute } from 'silkrouter';
+import { equal } from 'assert';
 
 (function($, router, route) {
   
@@ -37,18 +38,7 @@ import { router, route } from 'jqueryrouter';
     }
   }
 
-  // Routing
-  route(handler);
-  function handler(e) {
-    switch(e.route) {
-      case '#home': { loadChannelDataToDOM(); }
-      case '#fav': { 
-        var list = $('#main-content').empty();
-        list.append(`<p>fav</p>`);  
-     }
-    }
-  }
-  
+
   // view modules
   function Feed(data) {
     this.render = function() {
@@ -115,8 +105,33 @@ import { router, route } from 'jqueryrouter';
     .fail(error);
   }
 
+
+
   $(document).ready(function() {
-    loadChannelDataToDOM();
+    
+    // Routing
+    route((e) => {
+      var isPageReload = !(e.originalEvent instanceof PopStateEvent);
+      var hasHash = window.location.hash!=='';
+      var isHashChange = (e.type === 'hashchange' || e.eventName === 'hashchange');
+
+      if((isPageReload && !hasHash) || isHashChange){
+        switch(e.route) {
+          case '/':
+          case '/index.html':
+          case '#/home': { 
+            loadChannelDataToDOM(); 
+            break;
+          }
+          case '#/fav': { 
+            var list = $('#main-content').empty();
+            list.append(`<p>fav</p>`); 
+            break; 
+          }
+        }
+      }
+    })
+
   });
 
 })(jQuery, router, route)

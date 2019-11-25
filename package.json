@@ -21,8 +21,7 @@
     "webpack-livereload-plugin": "^2.2.0"
   },
   "dependencies": {
-    "deparam.js": "^2.0.11",
     "jquery": "^3.4.1",
-    "jqueryrouter": "^2.2.5"
+    "silkrouter": "^3.4.6"
   }
 }
