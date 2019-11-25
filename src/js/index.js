@@ -17,15 +17,16 @@ import { route } from 'silkrouter';
   }
 
   // Event Handlers
-  function clickHandler(ev, arg) {
-    console.log(arg);
+  function clickHandler(ev, id) {
+    console.log(id);
   }
 
   // view modules
   function Feed(data) {
-      return html `<li id="${data.guid}" class="feed-item"
-      @click=${ev => clickHandler(ev, data.guid)})}>
-      ${data.title}
+      return html `<li id="${data.guid}" class="feed-item">
+      ${data.title} 
+      ${data.like} 
+      <span class="icon oi oi-star" @click=${ev => clickHandler(ev, data.guid)})}></span>
       </li>`;
   }
   
