@@ -1,60 +1,40 @@
 import * as jQuery from 'jquery';
-import { router, route, unroute } from 'silkrouter';
-import { equal } from 'assert';
+import { html, render } from 'lit-html';
+import { route } from 'silkrouter';
 
-(function($, router, route) {
+(function($, route, html, render) {
   
   // Models
   class FeedItem {
     constructor(guid, title, link, description){
-      this._guid = guid;
-      this._title = title;
-      this._link = link;
-      this._description = description;
-      this._read = false;
-      this._like = false;
-    }
-
-    // Getters & Setters
-    get title() {
-      return this._title;
-    }
-    set title(title) {
-      this._title = title;
-    }
-
-    get read() {
-      return this._read;
-    }
-    set read(read) {
-      this._read = read;
-    }
-
-    get like() {
-      return this._like;
-    }
-    set like(like) {
-      this._like = like;
+      this.guid = guid;
+      this.title = title;
+      this.link = link;
+      this.description = description;
+      this.read = false;
+      this.like = false;
     }
   }
 
+  // Event Handlers
+  function clickHandler(ev, arg) {
+    console.log(arg);
+  }
 
   // view modules
   function Feed(data) {
-    this.render = function() {
-      return `<li class="feed-item">${data.title}</li>`;
-    };
+      return html `<li id="${data.guid}" class="feed-item"
+      @click=${ev => clickHandler(ev, data.guid)})}>
+      ${data.title}
+      </li>`;
   }
   
   function Channel(allItems) {
-    this.render = function() {
-      return `<ul class="feed-list">
+      return html `<ul class="feed-list">
         ${allItems.map(item => {
-          var listItem = new Feed(item);
-          return listItem.render();
-        }).join('')}
+          return Feed(item);
+        })}
       </ul>`;
-    };
   }
 
   // data fetching
@@ -83,13 +63,11 @@ import { equal } from 'assert';
   
   // entry point - app setup
   var populateChannelDataToDOM = function(xmlDoc) {
-
     var allItems = xmlDocToJSObj(xmlDoc);
-    var channel = new Channel(allItems);
-
-    var list = $('#main-content').empty();
-    list.append(channel.render());  
+    var list = $('#main-content');
+    render(Channel(allItems), list[0]);
   };
+  
   var loadChannelDataToDOM = function(){
     var success = function(data) {
       populateChannelDataToDOM(data);
@@ -104,8 +82,6 @@ import { equal } from 'assert';
     .done(success)
     .fail(error);
   }
-
-
 
   $(document).ready(function() {
     
@@ -138,8 +114,8 @@ import { equal } from 'assert';
             break;
           }
           case '#/fav': { 
-            var list = $('#main-content').empty();
-            list.append(`<p>fav</p>`); 
+            var list = $('#main-content');
+            render(html `<p>FAV</p>`, list[0]);
             break; 
           }
         }
@@ -148,4 +124,4 @@ import { equal } from 'assert';
 
   });
 
-})(jQuery, router, route)
+})(jQuery, route, html, render)
